@@ -68,3 +68,6 @@ typings/
 
 # Private Configs
 config.json
+
+package-lock.json
+config-example.json
