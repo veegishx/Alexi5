@@ -74,7 +74,7 @@ bot.on('message', async msg => {
 
         if(args[0] == undefined || !args[0].trim().length) {
             msg.channel.send('Error: You need to specify at least 1 argument');
-            msg.channel.send('Try **+!help** for a list of options');
+            msg.channel.send(`Try **${prefix}help** for a list of options`);
         }
 
         switch(args[0].toLowerCase()) {
@@ -100,10 +100,10 @@ bot.on('message', async msg => {
                     const embed = new Discord.RichEmbed();
                     embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
                     embed.setDescription('Stream music from YouTube using the commands below');
-                    embed.addField('Play songs in playlist: ', '+!music play', true);
-                    embed.addField('Add track to playlist: ', '+!music add [url]', true);
-                    embed.addField('Skip current track: ', '+!music skip', true);
-                    embed.addField('Stop streaming music & leave channel: ', '+!leave', true);
+                    embed.addField('Play songs in playlist: ', `${prefix}music play`, true);
+                    embed.addField('Add track to playlist: ', `${prefix}music add [url]`, true);
+                    embed.addField('Skip current track: ', `${prefix}music skip`, true);
+                    embed.addField('Stop streaming music & leave channel: ', `${prefix}leave`, true);
                     embed.setColor('#2196f3');
                     embed.setFooter('Note: Make sure that the playlist contains at least one song before playing it. You can also add songs on the go.');
                     embed.setAuthor('Alexi5 Music Streaming Help');

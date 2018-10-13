@@ -17,8 +17,8 @@ module.exports = function listCommands(msg) {
     embed.setTitle(':robot: My Commands');
     embed.setDescription('Here\'s a list of commands you can run to make me perform tasks');
     embed.addField('Commands:', commands, true);
-    embed.addField('Usage: ', '+![command] || +![command] [arg]', true);
-    embed.addField('Example: ', '+!ping, +!joke, +!meme, +!del 3, +!kick @somebody', true);
+    embed.addField('Usage: ', `${prefix}[command] || ${prefix}[command] [arg]`, true);
+    embed.addField('Example: ', `${prefix}ping, ${prefix}joke, ${prefix}meme, ${prefix}del 3, ${prefix}kick @somebody`, true);
     embed.setColor('#2196f3');
     msg.channel.send(embed);
 }
