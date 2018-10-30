@@ -10,7 +10,6 @@ Alexi5 is a basic Discord bot built using discord.js
 * **amazeme** - Used to be amazed.
 * **server cleanup** - Remove messages in bulk.
 
-
 ### Installation
 * clone this repo
 * rename config-example.json to config.json
