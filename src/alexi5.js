@@ -8,6 +8,7 @@ const ytdl = require('ytdl-core');
 const config = require('./config.json');
 const meme = require('./commands/fun/meme.js');
 const joke = require('./commands/fun/joke.js');
+const amazeme = require('./commands/fun/amazeme.js');
 const play = require('./commands/music/play.js');
 const listCommands = require('./commands/default.js');
 
@@ -86,6 +87,9 @@ bot.on('message', async msg => {
                 break;
             case 'joke' :
                 joke(msg);
+                break;
+            case 'amazeme':
+                amazeme(msg);
                 break;
             case 'list' :
                 listCommands(msg);
