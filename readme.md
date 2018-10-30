@@ -26,12 +26,13 @@ https://discordapp.com/oauth2/authorize?&client_id=YOUR_CLIENT_ID_HERE&scope=bot
 
 
 ### Basic Commands
-* +!help: List some helpful commands
-* +!music: Lists all music commands
-* +!ping: Returns api and bot reponse times
-* +!meme: Returns a random meme
-* +!joke: returns a radom joke
-* +!purge [num]: Removes `num` messages from server
+* [prefix]help: List some helpful commands
+* [prefix]music: Lists all music commands
+* [prefix]ping: Returns api and bot reponse times
+* [prefix]meme: Returns a random meme
+* [prefix]joke: Returns a random joke
+* [prefix]amazeme: Returns a random thing that is interesting.
+* [prefix]purge [num]: Removes `num` messages from server
 * NFSW commands ommitted
 
 ![alt text](Selection_022.png)
