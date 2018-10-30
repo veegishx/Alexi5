@@ -1,3 +1,4 @@
+//const prefix = config.prefix;
 const Discord = require('discord.js');
 const { lstatSync, readdirSync } = require('fs')
 const { join } = require('path')
