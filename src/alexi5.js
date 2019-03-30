@@ -81,7 +81,7 @@ bot.on('message', async msg => {
 
         switch (args[0].toLowerCase()) {
             case 'help':
-                listCommands(msg);
+                listCommands(prefix, msg);
                 break;
             case 'info':
                 info(bot, msg);

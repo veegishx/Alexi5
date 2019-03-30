@@ -4,10 +4,10 @@ const { lstatSync, readdirSync } = require('fs')
 const { join } = require('path')
 const isDirectory = source => lstatSync(source).isDirectory()
 const getDirectories = source =>
-readdirSync(source).map(name => join(source, name)).filter(isDirectory)
+    readdirSync(source).map(name => join(source, name)).filter(isDirectory)
 
 
-module.exports = function listCommands(msg) {
+module.exports = function listCommands(prefix, msg) {
     const embed = new Discord.RichEmbed();
     const directories = getDirectories('./src/commands');
     const commands = [];
