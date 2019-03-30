@@ -11,6 +11,7 @@ const joke = require('./commands/fun/joke.js');
 const amazeme = require('./commands/fun/amazeme.js');
 const play = require('./commands/music/play.js');
 const listCommands = require('./commands/default.js');
+const info = require('./commands/utility/info.js');
 
 const prefix = config.prefix;
 const token = config.token;
@@ -81,6 +82,9 @@ bot.on('message', async msg => {
         switch (args[0].toLowerCase()) {
             case 'help':
                 listCommands(msg);
+                break;
+            case 'info':
+                info(bot, msg);
                 break;
             case 'meme':
                 meme(msg);
