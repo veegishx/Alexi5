@@ -7,6 +7,7 @@ const got = require('got');
 const ytdl = require('ytdl-core');
 const config = require('./config.json');
 const meme = require('./commands/fun/meme.js');
+const horny = require('./commands/nsfw/horny.js');
 const joke = require('./commands/fun/joke.js');
 const amazeme = require('./commands/fun/amazeme.js');
 const play = require('./commands/music/play.js');
@@ -88,6 +89,9 @@ bot.on('message', async msg => {
                 break;
             case 'meme':
                 meme(msg);
+                break;
+            case 'horny':
+                horny(msg);
                 break;
             case 'joke':
                 joke(msg);
