@@ -24,13 +24,14 @@ var timestamp = '[' + time.getHours() + ':' + time.getMinutes() + ':' + time.get
 function stream(connection, msg) {
     var server = servers[msg.guild.id];
     // audioonly || highestaudio
-    server.dispatcher = connection.playStream(ytdl(server.queue[0], { quality: "highestaudio" }));
+    server.dispatcher = connection.playStream(ytdl(server.queue[0], { filter: "audioonly" }));
     console.log('stream:' + server.queue);
 
     server.dispatcher.on("end", function() {
         // Remove the current song from the queue
         server.queue.shift();
         if (server.queue[0]) {
+            msg.channel.send('Now playing: ' + server.queue[0]);
             // Keep streaming as long as there is at least 1 item in queue
             stream(connection, msg);
         } else {
