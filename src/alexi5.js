@@ -13,6 +13,7 @@ const amazeme = require('./commands/fun/amazeme.js');
 const play = require('./commands/music/play.js');
 const listCommands = require('./commands/default.js');
 const info = require('./commands/utility/info.js');
+const meeting = require('./commands/utility/meeting.js');
 
 const prefix = config.prefix;
 const token = config.token;
@@ -100,6 +101,15 @@ bot.on('message', async msg => {
             case 'amazeme':
                 amazeme(msg);
                 break;
+            case 'meeting':
+                if (!args[1]) {
+                    msg.channel.send("Please specify a time for the meeting.");
+                } else {
+                    if (args[1]) {
+                        meeting(msg, args[1], args[2], args[3]);
+                    }
+                }
+                break;
             case 'list':
                 listCommands(msg);
                 break;
@@ -185,10 +195,21 @@ bot.on('message', async msg => {
 
                             })
                         } else {
-                            server.queue.push(args[2]);
-                            msg.delete().catch(O_o => {});
-                            msg.channel.send("Song added. Gotta improve this response someday...maybe add a timeout :thinking:");
-                            console.log('add:' + server.queue);
+                            let longFormat = '=';
+                            if (args[2].includes(longFormat)) {
+                                var videoId = args[2].split('=').pop();
+                            } else {
+                                var videoId = args[2].splitOnLast('/')[1].split('/').pop();
+                            }
+
+                            got(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${ytkey}`).then(response => {
+                                let result = JSON.parse(response.body);
+                                let titleQueue = '';
+                                let videoTitle = result.items[0].snippet.title;
+                                server.queue.push(args[2]);
+                                msg.channel.send(`${videoTitle} has been added to queue`);
+                                console.log('Song added:' + server.queue);
+                            })
                         }
                     }
 
