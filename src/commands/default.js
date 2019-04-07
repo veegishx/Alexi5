@@ -30,7 +30,7 @@ module.exports = function listCommands(prefix, msg) {
     embed.addField('Jokes', `View a joke: ${prefix}joke`, true);
     embed.addField('Amazeme', `Be amazed: ${prefix}amazeme`, true);
     embed.addField('Music', `View music streaming help: ${prefix}music`, true);
-    embed.addField('Advice', `Ask for advice: ${prefix}ask`, true);
+    embed.addField('Advice', `Ask for bot advice: ${prefix}ask`, true);
     embed.addField(':tools: USEFUL STUFF', '--------------');
     embed.addField('The Purge', `Purge messages: ${prefix}purge [num]`, true);
     embed.addField('Ping', `View latency to server: ${prefix}ping`, true);
