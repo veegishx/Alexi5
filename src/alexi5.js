@@ -93,8 +93,8 @@ bot.on('message', async msg => {
                 meme(msg);
                 break;
             case 'nsfw':
-                //nsfw(msg);
-                msg.reply("Don't even think about it...")
+                nsfw(msg);
+                //msg.reply("Don't even think about it...")
                 break;
             case 'joke':
                 joke(msg);
