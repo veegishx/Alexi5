@@ -46,22 +46,22 @@ bot.on('ready', () => {
     console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
     console.log(`--------------------------------------------`);
     console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
-    bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
     console.log(`Bot is up and running`);
+    //console.log(bot.guilds);
+    //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
     console.log(`--------------------------------------------`);
+    bot.user.setActivity(`Playing +!help`);
 });
 
 //Credits for these helpful stats: https://gist.github.com/eslachance/3349734a98d30011bb202f47342601d3
 bot.on("guildCreate", guild => {
     // This event triggers when the bot joins a guild.
     console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-    bot.user.setActivity(`Serving ${bot.users.size} discord users`);
 });
 
 bot.on("guildDelete", guild => {
     // this event triggers when the bot is removed from a guild.
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
 });
 
 bot.on('message', async msg => {
