@@ -128,11 +128,11 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
                 }
 
                 if (server.queue[0]) {
-                    msg.channel.send("**There are currently " + `**${queueCount}**` + "tracks queued up.**");
+                    msg.channel.send("**There are currently " + `${queueCount}` + " tracks queued up.**");
                     msg.channel.send("**------------------------------------------------**");
                     console.log(title.queue.length);
                     for (i = 0; i < queueCount; i++) {
-                        msg.channel.send("`" + `${i}` + "` " + `${title.queue[i]}`)
+                        msg.channel.send("`" + `${i}` + "` " + `**${title.queue[i]}**`)
                         console.log(title.queue[i]);
                     }
                 }
