@@ -88,13 +88,20 @@ module.exports = function play(ytkey, servers, msg, prefix, musicCommand, resour
         }
 
         if (musicCommand == 'play') {
-            if (!msg.guild.voiceChannel) {
+            if (server.dispatcher) {
+                msg.send("Music is already being streamed")
+            } else {
                 msg.member.voiceChannel.join().then(connection => {
                     // Append song to queue
                     stream(msg, servers, connection);
                     console.log('play:' + server.queue);
                 }).catch(console.log);
             }
+            /*
+            if (!msg.guild.voiceChannel) {
+
+            }
+            */
         }
 
 
