@@ -50,7 +50,7 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
                     let truncatedId = resourceUrl.split('=');
                     let playlistId = truncatedId[2];
                     console.log('id: ' + playlistId);
-                    got(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${ytkey}&maxResults=25`).then(response => {
+                    got(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${ytkey}`).then(response => {
                         let result = JSON.parse(response.body);
                         let count = result.pageInfo.totalResults;
                         let flag = 'Deleted video';
@@ -116,13 +116,16 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
             if (server.dispatcher) {
                 title.queue.shift();
                 server.dispatcher.end();
-                msg.channel.send(`Now playing *${title.queue[1]}*`);
+                msg.channel.send(`Now playing **${title.queue[1]}**`);
             }
         }
 
         if (musicCommand == 'list') {
-            if (server.dispatcher) {
-                server.dispatcher.end();
+            if (server.queue[0]) {
+                console.log(title.queue.length);
+                for (i = 0; i < title.queue.length; i++) {
+                    console.log(title.queue[i + 1]);
+                }
             }
         }
     }

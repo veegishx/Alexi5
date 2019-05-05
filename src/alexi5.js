@@ -113,9 +113,6 @@ bot.on('message', async msg => {
                     }
                 }
                 break;
-            case 'list':
-                listCommands(msg);
-                break;
             case 'ping':
                 const m = await msg.channel.send("Ping?");
                 m.edit(`Pong! Latency is ${m.createdTimestamp - msg.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
