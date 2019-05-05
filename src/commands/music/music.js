@@ -120,11 +120,18 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
             }
 
             if (musicCommand == 'list') {
+                let queueCount = 0;
+                if (title.queue.length > 25) {
+                    queueCount = 25;
+                } else {
+                    queueCount = title.queue.length;
+                }
+
                 const embed = new Discord.RichEmbed();
                 embed.setTitle("Current tracks in playlist");
                 if (server.queue[0]) {
                     console.log(title.queue.length);
-                    for (i = 0; i < title.queue.length; i++) {
+                    for (i = 0; i < queueCount; i++) {
                         embed.addField(`${i}.`, `(${title.queue[i]})`);
                         console.log(title.queue[i]);
                     }
