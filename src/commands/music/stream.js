@@ -10,7 +10,7 @@ module.exports = function stream(msg, servers, connection) {
         // Remove the current song from the queue
         server.queue.shift();
         if (server.queue[0]) {
-            msg.channel.send('Now playing: ' + server.queue[0]);
+            msg.channel.send('Now playing: ' + server.queue[1]);
             // Keep streaming as long as there is at least 1 item in queue
             stream(msg, servers, connection);
         } else {

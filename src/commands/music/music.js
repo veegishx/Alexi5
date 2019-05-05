@@ -116,7 +116,7 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
             if (server.dispatcher) {
                 title.queue.shift();
                 server.dispatcher.end();
-                msg.channel.send(`Now playing *${title.queue[0]}*`);
+                msg.channel.send(`Now playing *${title.queue[1]}*`);
             }
         }
 
