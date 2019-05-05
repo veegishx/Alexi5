@@ -11,9 +11,9 @@ module.exports = function stream(msg, servers, titles, connection) {
         // Remove the current song from the queue
         server.queue.shift();
         if (server.queue[0]) {
-            msg.channel.send(`Now playing **${title.queue[1]}**`);
+            msg.channel.send(`Now playing **${title.queue[0]}**`);
             // Keep streaming as long as there is at least 1 item in queue
-            stream(msg, connection);
+            stream(msg, servers, titles, connection);
         } else {
             // Make bot leave if queue has no item
             connection.disconnect();
