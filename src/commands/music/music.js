@@ -5,7 +5,6 @@ const embed = new Discord.RichEmbed();
 module.exports = function music(ytkey, servers, titles, msg, prefix, musicCommand, resourceUrl) {
         // music {musicCommand} || music {musicCommand} {resourceUrl}
         if (!musicCommand) {
-            const embed = new Discord.RichEmbed();
             embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
             embed.setDescription('Stream music from YouTube using the commands below');
             embed.addField('Play songs in playlist: ', `${prefix}music play`, true);
@@ -91,7 +90,7 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
                         })
                     }
                 } catch (e) {
-                    msg.channel.send("Invalid arguments detected. See `+!music")
+                    msg.channel.send("Invalid arguments detected. See `+!music`")
                 }
             }
 
@@ -121,12 +120,16 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
             }
 
             if (musicCommand == 'list') {
+                const embed = new Discord.RichEmbed();
+                embed.setTitle("Current tracks in playlist");
                 if (server.queue[0]) {
                     console.log(title.queue.length);
                     for (i = 0; i < title.queue.length; i++) {
+                        embed.addField(`${i}.`, `(${title.queue[i]})`);
                         console.log(title.queue[i]);
                     }
                 }
+                msg.channel.send(embed)
             }
         }
     }

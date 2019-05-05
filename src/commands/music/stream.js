@@ -10,6 +10,7 @@ module.exports = function stream(msg, servers, titles, connection) {
     server.dispatcher.on("end", function() {
         // Remove the current song from the queue
         server.queue.shift();
+        title.queue.shift();
         if (server.queue[0]) {
             msg.channel.send(`Now playing **${title.queue[0]}**`);
             // Keep streaming as long as there is at least 1 item in queue
