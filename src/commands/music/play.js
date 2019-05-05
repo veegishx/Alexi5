@@ -2,6 +2,7 @@ const stream = require('./stream');
 const got = require('got');
 module.exports = function play(ytkey, servers, msg, prefix, musicCommand, resourceUrl) {
     // music {musicCommand} || music {musicCommand} {resourceUrl}
+    let titleQueue = [];
     if (!musicCommand) {
         const embed = new Discord.RichEmbed();
         embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
@@ -48,7 +49,6 @@ module.exports = function play(ytkey, servers, msg, prefix, musicCommand, resour
                     let result = JSON.parse(response.body);
                     let count = result.pageInfo.totalResults;
                     let flag = 'Deleted video';
-                    let titleQueue = [];
                     // The list API doesn't provide a property for videoIDs
                     // Instead the video IDs are provided in the thumbnail URLs
                     // Building the video URLS after extracting the IDs from the thumbnails
