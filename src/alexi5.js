@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-var servers = {};
+let servers = {};
+let titles = {};
 
 const got = require('got');
 const ytdl = require('ytdl-core');
@@ -10,7 +11,7 @@ const meme = require('./commands/fun/meme.js');
 const nsfw = require('./commands/nsfw/nsfw.js');
 const joke = require('./commands/fun/joke.js');
 const amazeme = require('./commands/fun/amazeme.js');
-const play = require('./commands/music/play.js');
+const music = require('./commands/music/music.js');
 const listCommands = require('./commands/default.js');
 const info = require('./commands/utility/info.js');
 const meeting = require('./commands/utility/meeting.js');
@@ -21,26 +22,6 @@ const ytkey = config.youtube;
 
 var time = new Date();
 var timestamp = '[' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds() + ']';
-
-function stream(connection, msg) {
-    var server = servers[msg.guild.id];
-    // audioonly || highestaudio
-    server.dispatcher = connection.playStream(ytdl(server.queue[0], { filter: "audioonly" }));
-    console.log('stream:' + server.queue);
-
-    server.dispatcher.on("end", function() {
-        // Remove the current song from the queue
-        server.queue.shift();
-        if (server.queue[0]) {
-            msg.channel.send('Now playing: ' + server.queue[0]);
-            // Keep streaming as long as there is at least 1 item in queue
-            stream(connection, msg);
-        } else {
-            // Make bot leave if queue has no item
-            connection.disconnect();
-        }
-    });
-}
 
 bot.on('ready', () => {
     console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
@@ -140,7 +121,21 @@ bot.on('message', async msg => {
                 m.edit(`Pong! Latency is ${m.createdTimestamp - msg.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
                 break;
             case 'music':
-                play(ytkey, servers, msg, args[0], args[1], args[2]);
+                if (!args[1]) {
+                    const embed = new Discord.RichEmbed();
+                    embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
+                    embed.setDescription('Stream music from YouTube using the commands below');
+                    embed.addField('Play songs in playlist: ', `${prefix}music play`, true);
+                    embed.addField('Add track to playlist: ', `${prefix}music add [url]`, true);
+                    embed.addField('Skip current track: ', `${prefix}music skip`, true);
+                    embed.addField('Stop streaming music & leave channel: ', `${prefix}leave`, true);
+                    embed.setColor('#2196f3');
+                    embed.setFooter('Note: Make sure that the playlist contains at least one song before playing it. You can also add songs on the go.');
+                    embed.setAuthor('Alexi5 Music Streaming Help');
+                    msg.channel.send(embed);
+                } else {
+                    music(ytkey, servers, titles, msg, args[0], args[1], args[2]);
+                }
                 break;
             case 'leave':
                 if (msg.guild.voiceConnection) {
