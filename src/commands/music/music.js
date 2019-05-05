@@ -32,7 +32,7 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
         }
 
         let server = servers[msg.guild.id];
-        let title = title[msg.guild.id];
+        let title = titles[msg.guild.id];
 
         console.log('========================================');
         console.log(prefix);

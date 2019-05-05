@@ -3,7 +3,7 @@ module.exports = function stream(msg, servers, titles, connection) {
     let server = servers[msg.guild.id];
     let title = titles[msg.guild.id];
     // audioonly || highestaudio
-    server.dispatcher = connection.playStream(ytdl(server.queue[0], { filter: "audioonly" }));
+    server.dispatcher = connection.playStream(ytdl(server.queue[0], { filter: "audioonly", quality: 'highestaudio', highWaterMark: 1 << 25 }), { highWaterMark: 1 });
     console.log(`${servers[msg.guild.id]} is streaming: ${server.queue[0]}`);
     console.log(`${servers[msg.guild.id]} queue has: ${server.queue}`);
 
