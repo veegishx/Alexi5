@@ -127,16 +127,16 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
                     queueCount = title.queue.length;
                 }
 
-                const embed = new Discord.RichEmbed();
-                embed.setTitle("Current tracks in playlist");
                 if (server.queue[0]) {
                     console.log(title.queue.length);
                     for (i = 0; i < queueCount; i++) {
-                        embed.addField(`${i}.`, `(${title.queue[i]})`);
+                        msg.channel.send("`" + `${i}` + "` " + `${title.queue[i]}`)
                         console.log(title.queue[i]);
                     }
                 }
-                msg.channel.send(embed)
+                msg.channel.send("**There are currently " + `**${title.queue[i]}**` + "tracks queued up.**");
+                msg.channel.send("**------------------------------------------------**");
+                msg.channel.send("`" + `${i}` + "` " + `**${title.queue[i]}**`);
             }
         }
     }
