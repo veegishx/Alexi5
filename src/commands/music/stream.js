@@ -1,6 +1,7 @@
 const ytdl = require('ytdl-core');
-module.exports = function stream(msg, servers, connection) {
-    var server = servers[msg.guild.id];
+module.exports = function stream(msg, servers, titles, connection) {
+    let server = servers[msg.guild.id];
+    let title = titles[msg.guild.id];
     // audioonly || highestaudio
     server.dispatcher = connection.playStream(ytdl(server.queue[0], { filter: "audioonly" }));
     console.log(`${servers[msg.guild.id]} is streaming: ${server.queue[0]}`);

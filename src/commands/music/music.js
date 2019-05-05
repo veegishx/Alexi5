@@ -32,7 +32,7 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
         }
 
         let server = servers[msg.guild.id];
-        let title = servers[msg.guild.id];
+        let title = title[msg.guild.id];
 
         console.log('========================================');
         console.log(prefix);
@@ -100,7 +100,7 @@ module.exports = function music(ytkey, servers, titles, msg, prefix, musicComman
             } else {
                 msg.member.voiceChannel.join().then(connection => {
                     // Append song to queue
-                    stream(msg, servers, connection);
+                    stream(msg, servers, titles, connection);
                     console.log('play:' + server.queue);
                 }).catch(console.log);
             }
