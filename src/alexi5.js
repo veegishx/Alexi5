@@ -1,7 +1,8 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 
-var servers = {};
+let servers = {};
+let titles = {};
 
 const got = require('got');
 const ytdl = require('ytdl-core');
@@ -9,8 +10,10 @@ const config = require('./config.json');
 const meme = require('./commands/fun/meme.js');
 const joke = require('./commands/fun/joke.js');
 const amazeme = require('./commands/fun/amazeme.js');
-const play = require('./commands/music/play.js');
+const music = require('./commands/music/music.js');
 const listCommands = require('./commands/default.js');
+const info = require('./commands/utility/info.js');
+const meeting = require('./commands/utility/meeting.js');
 
 const prefix = config.prefix;
 const token = config.token;
@@ -19,45 +22,26 @@ const ytkey = config.youtube;
 var time = new Date();
 var timestamp = '[' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds() + ']';
 
-function stream(connection, msg) {
-    var server = servers[msg.guild.id];
-    // audioonly || highestaudio
-    server.dispatcher = connection.playStream(ytdl(server.queue[0], { quality: "highestaudio" }));
-    console.log('stream:' + server.queue);
-
-    server.dispatcher.on("end", function() {
-        // Remove the current song from the queue
-        server.queue.shift();
-        if (server.queue[0]) {
-            // Keep streaming as long as there is at least 1 item in queue
-            stream(connection, msg);
-        } else {
-            // Make bot leave if queue has no item
-            connection.disconnect();
-        }
-    });
-}
-
 bot.on('ready', () => {
     console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
     console.log(`--------------------------------------------`);
     console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
-    bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
     console.log(`Bot is up and running`);
+    //console.log(bot.guilds);
+    //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
     console.log(`--------------------------------------------`);
+    bot.user.setActivity(`Playing +!help`);
 });
 
 //Credits for these helpful stats: https://gist.github.com/eslachance/3349734a98d30011bb202f47342601d3
 bot.on("guildCreate", guild => {
     // This event triggers when the bot joins a guild.
     console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-    bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
 });
 
 bot.on("guildDelete", guild => {
     // this event triggers when the bot is removed from a guild.
     console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-    bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
 });
 
 bot.on('message', async msg => {
@@ -80,10 +64,16 @@ bot.on('message', async msg => {
 
         switch (args[0].toLowerCase()) {
             case 'help':
-                listCommands(msg);
+                listCommands(prefix, msg);
+                break;
+            case 'info':
+                info(bot, msg);
                 break;
             case 'meme':
                 meme(msg);
+                break;
+            case 'nsfw':
+                msg.reply("This feature has been removed for now...")
                 break;
             case 'joke':
                 joke(msg);
@@ -91,15 +81,41 @@ bot.on('message', async msg => {
             case 'amazeme':
                 amazeme(msg);
                 break;
-            case 'list':
-                listCommands(msg);
+            case 'ask':
+                if (!args[1]) {
+                    msg.reply("Please ask a question `+!ask your_question`");
+                } else {
+                    let replies = [
+                        'Yes.',
+                        'Yes.',
+                        'No.',
+                        'Perhaps you should consider it.',
+                        'Probably.',
+                        'Indeed',
+                        'Just get over with it.',
+                        'Maybe, maybe not. Maybe go fuck yourself.',
+                        'When the sun rises north, and when the pigs fly, then thou shalt find what you seek.'
+                    ];
+
+                    let botreply = replies[Math.floor(Math.random() * replies.length)];
+                    msg.reply(botreply);
+                }
+
+                break;
+            case 'meeting':
+                if (!args[1]) {
+                    msg.channel.send("Please specify a time for the meeting.");
+                } else {
+                    if (args[1]) {
+                        meeting(msg, args[1], args[2], args[3]);
+                    }
+                }
                 break;
             case 'ping':
                 const m = await msg.channel.send("Ping?");
                 m.edit(`Pong! Latency is ${m.createdTimestamp - msg.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
                 break;
             case 'music':
-                // music {args[1]} || music {args[1]} {args[2]}
                 if (!args[1]) {
                     const embed = new Discord.RichEmbed();
                     embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
@@ -113,82 +129,7 @@ bot.on('message', async msg => {
                     embed.setAuthor('Alexi5 Music Streaming Help');
                     msg.channel.send(embed);
                 } else {
-                    if (!msg.member.voiceChannel) {
-                        msg.reply('Please join a voice channel first.');
-                        return;
-                    }
-
-                    if (!servers[msg.guild.id]) {
-                        servers[msg.guild.id] = {
-                            queue: []
-                        }
-                    }
-
-                    var server = servers[msg.guild.id];
-
-                    if (args[1] == 'play') {
-                        if (!msg.guild.voiceChannel) {
-                            msg.member.voiceChannel.join().then(connection => {
-                                // Append song to queue
-                                stream(connection, msg);
-                                console.log('play:' + server.queue);
-                            }).catch(console.log);
-                        }
-                    }
-
-                    console.log('========================================');
-                    console.log(args[0]);
-                    console.log(args[1]);
-                    console.log(args[2]);
-                    console.log('========================================');
-
-
-
-                    if (args[1] == 'add') {
-                        var server = servers[msg.guild.id];
-                        // Playlist resolver
-                        var playlistResolve = 'playlist';
-                        if (args[2].includes(playlistResolve)) {
-                            var playlistId = args[2].split('=').pop();
-                            console.log('id: ' + playlistId);
-                            got(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${ytkey}&maxResults=50`).then(response => {
-                                let result = JSON.parse(response.body);
-                                var count = result.pageInfo.totalResults;
-                                var flag = 'Deleted video';
-                                var titleQueue = [];
-                                // The list API doesn't provide a property for videoIDs
-                                // Instead the video IDs are provided in the thumbnail URLs
-                                // Building the video URLS after extracting the IDs from the thumbnails
-                                for (var video in result.items) {
-                                    if (!result.items[video].snippet.title.includes(flag)) {
-                                        var videoId = result.items[video].snippet.thumbnails.default.url.replace('https://i.ytimg.com/vi/', '').replace('/default.jpg', '');
-                                        var videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-                                        server.queue.push(videoUrl);
-                                        titleQueue.push(result.items[video].snippet.title);
-                                        console.log(titleQueue);
-                                    }
-                                }
-                                msg.channel.send(`Playlist successfully parsed and loaded. ${count} songs have been added to the queue.`)
-                                    .then(sent => console.log(`A playlist has been loaded`));
-                                if (count > 200) {
-                                    msg.channel.send(`Wait what?? HOLYSHIT ${count} songs...`)
-                                }
-
-                            })
-                        } else {
-                            server.queue.push(args[2]);
-                            msg.delete().catch(O_o => {});
-                            msg.channel.send("Song added. Gotta improve this response someday...maybe add a timeout :thinking:");
-                            console.log('add:' + server.queue);
-                        }
-                    }
-
-                    if (args[1] == 'skip') {
-                        var server = servers[msg.guild.id];
-                        if (server.dispatcher) {
-                            server.dispatcher.end();
-                        }
-                    }
+                    music(ytkey, servers, titles, msg, args[0], args[1], args[2]);
                 }
                 break;
             case 'leave':

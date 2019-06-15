@@ -22,7 +22,10 @@
     "discord.js": "^11.3.2",
     "ffmpeg-binaries": "^3.2.2",
     "got": "^8.3.1",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.23",
     "opusscript": "0.0.6",
+    "socket.io": "^2.2.0",
     "xmlhttprequest": "^1.8.0",
     "ytdl-core": "^0.20.4"
   }
