@@ -8,7 +8,6 @@ const got = require('got');
 const ytdl = require('ytdl-core');
 const config = require('./config.json');
 const meme = require('./commands/fun/meme.js');
-const nsfw = require('./commands/nsfw/nsfw.js');
 const joke = require('./commands/fun/joke.js');
 const amazeme = require('./commands/fun/amazeme.js');
 const music = require('./commands/music/music.js');
@@ -74,8 +73,7 @@ bot.on('message', async msg => {
                 meme(msg);
                 break;
             case 'nsfw':
-                nsfw(msg);
-                //msg.reply("Don't even think about it...")
+                msg.reply("This feature has been removed for now...")
                 break;
             case 'joke':
                 joke(msg);
