@@ -4,16 +4,16 @@
 Alexi5 is a basic Discord bot built using discord.js
 
 ### **Features**
- #### Youtube Music Steaming
+ #### 🔊 Youtube Music Steaming
  Queue up YouTube music videos and stream the audio to a voice channel. Youtube playlists are also supported.
- #### Dank Memes
+ #### 🔥 Dank Memes
  What would a server be without memes. Get the dankest memes on your server.
-#### Jokes
-Nobody uses that feature but whatever.
-#### Amazeme
-Used to be amazed.
-#### Server Cleanup
-Clear messages cluttering your server in bulk. 
+ #### 🤣 Jokes
+ Nobody uses that feature but whatever.
+ #### 😮 Amazeme
+ Used to be amazed.
+ #### 🗑 Server Cleanup
+ Clear messages cluttering your server in bulk. 
 
 and more...
 
