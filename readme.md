@@ -11,7 +11,7 @@ Alexi5 is a basic Discord bot built using discord.js
 * **server cleanup** - Remove messages in bulk.
 
 ### Installation
-* clone this repo
+* Clone this repo
 * rename config-example.json to config.json
 * Create a new app here: https://discordapp.com/developers/applications/me
 * Paste the bot token in your config.json
