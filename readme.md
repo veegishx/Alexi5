@@ -10,11 +10,9 @@ Alexi5 is a basic Discord bot built using discord.js
 * **amazeme** - Used to be amazed.
 * **server cleanup** - Remove messages in bulk.
 
-and more...
-
 ### Installation
-* clone this repo
-* rename config-example.json to config.json
+* Clone this repo
+* Rename config-example.json to config.json
 * Create a new app here: https://discordapp.com/developers/applications/me
 * Paste the bot token in your config.json
 * Get a YouTube Api key from [here](https://console.developers.google.com/apis/credentials?project=_) and paste it in your config.json
@@ -34,6 +32,7 @@ https://discordapp.com/oauth2/authorize?&client_id=YOUR_CLIENT_ID_HERE&scope=bot
 * [prefix]joke: Returns a random joke
 * [prefix]amazeme: Returns a random thing that is interesting.
 * [prefix]purge [num]: Removes `num` messages from server
+* NFSW commands ommitted
 
-![help menu](bothelpmenu.png)
+![alt text](Selection_022.png)
 
