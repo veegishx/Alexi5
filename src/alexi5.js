@@ -100,16 +100,6 @@ bot.on('message', async msg => {
                     let botreply = replies[Math.floor(Math.random() * replies.length)];
                     msg.reply(botreply);
                 }
-
-                break;
-            case 'meeting':
-                if (!args[1]) {
-                    msg.channel.send("Please specify a time for the meeting.");
-                } else {
-                    if (args[1]) {
-                        meeting(msg, args[1], args[2], args[3]);
-                    }
-                }
                 break;
             case 'ping':
                 const m = await msg.channel.send("Ping?");
