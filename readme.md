@@ -30,7 +30,7 @@ https://discordapp.com/oauth2/authorize?&client_id=YOUR_CLIENT_ID_HERE&scope=bot
 * [prefix]ping: Returns api and bot reponse times
 * [prefix]meme: Returns a random meme
 * [prefix]joke: Returns a random joke
-* [prefix]amazeme: Returns a random thing that is interesting.
+* [prefix]amazeme: Returns a random thing that is amazing.
 * [prefix]purge [num]: Removes `num` messages from server
 * NFSW commands ommitted
 
