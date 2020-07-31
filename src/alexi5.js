@@ -1,11 +1,11 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
+const got = require('got');
 
 let servers = {};
 let titles = {};
 
-const got = require('got');
 const ytdl = require('ytdl-core');
 const config = require('./config.json');
 const music = require('./commands/music/music.js');
@@ -64,7 +64,7 @@ bot.on('message', async (message) => {
     // If command sent by user is registered with the bot then execute command
     // Else send reply to inform user that command does not exist
     try {
-        const command = bot.commands.get(userCommand);
+        const command = bot.commands.get(userCommand) || bot.aliases.get(userCommand);
         command.execute(message, args);
     } catch(err) {
         message.channel.send("Zoinks, I cannot understand this command!")
