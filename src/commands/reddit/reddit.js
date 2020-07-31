@@ -7,7 +7,7 @@ module.exports = {
     alias: 'rdt',
     description: 'Returns a random content from a specified reddit.com. If no subreddit is specified then return random content from a random subreddit',
     execute(message, args) {
-        const subreddit = args.shift();
+        const subreddit = args.shift().toLowerCase();
 
         let url = ``;
         if(subreddit == null) {
