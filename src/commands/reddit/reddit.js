@@ -22,25 +22,25 @@ module.exports = {
                         const content = JSON.parse(response.body);
                         const postType = content[0].data.children[0].data.post_hint;
                         const permalink = content[0].data.children[0].data.permalink;
-                        const memeUrl = `https://reddit.com${permalink}`;
-                        const memeImage = content[0].data.children[0].data.url;
-                        const memeTitle = content[0].data.children[0].data.title;
-                        const memeUpvotes = content[0].data.children[0].data.ups;
-                        const memeNumComments = content[0].data.children[0].data.num_comments;
+                        const postUrl = `https://reddit.com${permalink}`;
+                        const postImage = content[0].data.children[0].data.url;
+                        const postTitle = content[0].data.children[0].data.title;
+                        const postUpvotes = content[0].data.children[0].data.ups;
+                        const postNumComments = content[0].data.children[0].data.num_comments;
                         if(postType == "rich:video") {
                             const videoUrl = content[0].data.children[0].data.url_overridden_by_dest;
                             message.channel.send(videoUrl);
                         } else {
                             const embed = new Discord.RichEmbed();
-                            embed.addField(`${memeTitle}`, `[View thread](${memeUrl})`);
-                            embed.setImage(memeImage);
-                            embed.setFooter(`👍 ${memeUpvotes} 💬${memeNumComments}`);
+                            embed.addField(`${postTitle}`, `[View thread](${postUrl})`);
+                            embed.setImage(postImage);
+                            embed.setFooter(`👍 ${postUpvotes} 💬${postNumComments}`);
                             message.channel.send(embed);
                         }
                     } catch (err) {
                         console.log(`URL: ${url}:`);
                         console.log(`${err.name}: ${err.message}`);
-                        message.channel.send("Meme machine goes brrr. Sorry, could not fetch a meme from this subreddit :(");
+                        message.channel.send("Reddit machine goes brrr. Sorry, could not fetch posts from this subreddit :(");
                     }
             });
         } catch(err) {
