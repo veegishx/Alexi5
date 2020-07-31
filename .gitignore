@@ -67,6 +67,6 @@ typings/
 .serverless
 
 # Private Configs
-/src/config.json
+config.json
 
 package-lock.json
