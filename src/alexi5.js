@@ -8,9 +8,6 @@ let titles = {};
 const got = require('got');
 const ytdl = require('ytdl-core');
 const config = require('./config.json');
-const meme = require('./commands/fun/meme.js');
-const joke = require('./commands/fun/joke.js');
-const amazeme = require('./commands/fun/amazeme.js');
 const music = require('./commands/music/music.js');
 //const listCommands = require('./commands/utility/default.js');
 const info = require('./commands/utility/info.js');
@@ -53,7 +50,7 @@ bot.on('ready', () => {
     //console.log(bot.guilds);
     //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
     console.log(`--------------------------------------------`);
-    bot.user.setActivity(`Playing +!help`);
+    bot.user.setActivity(`Aye +!help`);
 });
 
 
@@ -64,7 +61,8 @@ bot.on('message', async (message) => {
     const args = message.content.slice(prefix.length).split(/ +/);
     const userCommand = args.shift().toLowerCase();
 
-    // Retrieve
+    // If command sent by user is registered with the bot then execute command
+    // Else send reply to inform user that command does not exist
     try {
         const command = bot.commands.get(userCommand);
         command.execute(message, args);
