@@ -5,7 +5,15 @@ module.exports = {
     execute(message, args, dependencies) {
         
         const [Discord, got] = dependencies;
-        const subreddit = args.shift().toLowerCase();
+        let subreddit = "";
+
+        if(args.length == 0) {
+            message.channel.send("Please specify a subreddit! Example: `<bot_prefix>reddit dankmemes`");
+            return;
+        } else {
+            subreddit = args.shift().toLowerCase();
+        }
+         
 
         let url = ``;
         if(subreddit == null) {
