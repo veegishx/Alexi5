@@ -1,21 +1,14 @@
 const Discord = require('discord.js');
-const bot = new Discord.Client();
 const fs = require('fs');
 const got = require('got');
-
-let servers = {};
-let titles = {};
-
 const ytdl = require('ytdl-core');
 const config = require('./config.json');
-const music = require('./commands/music/music.js');
-//const listCommands = require('./commands/utility/default.js');
-const info = require('./commands/utility/info.js');
-//const meeting = require('./commands/utility/meeting.js');
 
 const prefix = config.prefix;
 const token = config.token;
 const ytkey = config.youtube;
+
+const bot = new Discord.Client();
 
 bot.commands = new Discord.Collection();
 bot.aliases = new Discord.Collection();
@@ -43,13 +36,13 @@ var time = new Date();
 var timestamp = '[' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds() + ']';
 
 bot.on('ready', () => {
-    console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
-    console.log(`--------------------------------------------`);
-    console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
-    console.log(`Bot is up and running`);
-    //console.log(bot.guilds);
-    //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
-    console.log(`--------------------------------------------`);
+    // console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
+    // console.log(`--------------------------------------------`);
+    // console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
+    // console.log(`Bot is up and running`);
+    // //console.log(bot.guilds);
+    // //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
+    // console.log(`--------------------------------------------`);
     bot.user.setActivity(`Aye +!help`);
 });
 
@@ -64,11 +57,16 @@ bot.on('message', async (message) => {
 
     switch(userCommand) {
         case "reddit":
-        case "fact":
+        case "fact": {
             const dependencies = [Discord, got];
             command.execute(message, args, dependencies);
             break;
-        
+        }
+        case "music": {
+            const dependencies = [ytdl];
+            command.execute(message, args, dependencies);
+            break;
+        }
         default:
             // If command sent by user is registered with the bot then execute command
             // Else send reply to inform user that command does not exist
