@@ -1,12 +1,10 @@
-const Discord = require('discord.js');
-const got = require("got");
-
-
 module.exports = {
     name: 'reddit',
     alias: 'rdt',
     description: 'Returns a random content from a specified reddit.com. If no subreddit is specified then return random content from a random subreddit',
-    execute(message, args) {
+    execute(message, args, dependencies) {
+        
+        const [Discord, got] = dependencies;
         const subreddit = args.shift().toLowerCase();
 
         let url = ``;

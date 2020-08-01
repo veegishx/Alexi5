@@ -5,7 +5,8 @@ module.exports = {
     name: 'fact',
     alias: 'fct',
     description: 'Returns a random useless fact',
-    execute(message, args) {
+    execute(message, args, dependencies) {
+        const [Discord, got] = dependencies;
         switch(args[0]) {
             case null:
                 option = "random";

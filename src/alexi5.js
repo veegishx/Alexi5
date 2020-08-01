@@ -60,16 +60,27 @@ bot.on('message', async (message) => {
 
     const args = message.content.slice(prefix.length).split(/ +/);
     const userCommand = args.shift().toLowerCase();
+    const command = bot.commands.get(userCommand) || bot.aliases.get(userCommand);
 
-    // If command sent by user is registered with the bot then execute command
-    // Else send reply to inform user that command does not exist
-    try {
-        const command = bot.commands.get(userCommand) || bot.aliases.get(userCommand);
-        command.execute(message, args);
-    } catch(err) {
-        message.channel.send("Zoinks, I cannot understand this command!")
-        console.log(`${err.name}: ${err.message}`);
+    switch(userCommand) {
+        case "reddit":
+        case "fact":
+            const dependencies = [Discord, got];
+            command.execute(message, args, dependencies);
+            break;
+        
+        default:
+            // If command sent by user is registered with the bot then execute command
+            // Else send reply to inform user that command does not exist
+            try {
+                command.execute(message, args);
+            } catch(err) {
+                message.channel.send("Zoinks, I cannot understand this command!")
+                console.log(`${err.name}: ${err.message}`);
+            }
     }
+
+
 
     console.log(`userCommands: ${userCommand}`);
     console.log(`args: ${args}`);
