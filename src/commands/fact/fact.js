@@ -25,7 +25,7 @@ module.exports = {
             got(url).then(response => {
                 try {
                     const data = JSON.parse(response.body);
-                    const embed = new Discord.RichEmbed();
+                    const embed = new Discord.MessageEmbed();
                     
                     if(option == "random") {
                         embed.setDescription(`${data.text}`);

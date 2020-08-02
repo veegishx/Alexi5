@@ -37,7 +37,7 @@ module.exports = {
                             const videoUrl = content[0].data.children[0].data.url_overridden_by_dest;
                             message.channel.send(videoUrl);
                         } else {
-                            const embed = new Discord.RichEmbed();
+                            const embed = new Discord.MessageEmbed();
                             embed.addField(`${postTitle}`, `[View thread](${postUrl})`);
                             embed.setImage(postImage);
                             embed.setFooter(`👍 ${postUpvotes} 💬${postNumComments}`);
