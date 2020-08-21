@@ -1,5 +1,5 @@
 {
-    "token": process.env.BOT_TOKEN,
+    "token": "...",
     "prefix": "+!",
-    "youtube": "AIzaSyDe067nNbYI3WLw7_Lv229Xsu62GXM-YLo"
+    "youtube": "..."
 }
