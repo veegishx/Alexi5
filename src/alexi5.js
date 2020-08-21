@@ -13,7 +13,6 @@ const amazeme = require('./commands/fun/amazeme.js');
 const music = require('./commands/music/music.js');
 const listCommands = require('./commands/default.js');
 const info = require('./commands/utility/info.js');
-const meeting = require('./commands/utility/meeting.js');
 
 const prefix = config.prefix;
 const token = process.env.BOT_TOKEN
