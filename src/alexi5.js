@@ -16,7 +16,7 @@ const info = require('./commands/utility/info.js');
 const meeting = require('./commands/utility/meeting.js');
 
 const prefix = config.prefix;
-const token = config.token;
+const token = process.env.BOT_TOKEN
 const ytkey = config.youtube;
 
 var time = new Date();
