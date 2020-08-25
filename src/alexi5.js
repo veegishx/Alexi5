@@ -1,12 +1,12 @@
+const config = require('dotenv').config();
 const Discord = require('discord.js');
 const fs = require('fs');
 const got = require('got');
 const ytdl = require('ytdl-core');
-const config = require('./config.json');
 
-const prefix = config.prefix;
-const token = config.token;
-const ytkey = config.youtube;
+const prefix = process.env.PREFIX;
+const token = process.env.BOT_TOKEN;
+const ytkey = process.env.YOUTUBE_KEY;
 
 const bot = new Discord.Client();
 
