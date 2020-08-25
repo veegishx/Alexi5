@@ -2,7 +2,7 @@
   "name": "alexi5",
   "version": "1.0.0",
   "description": "",
-  "main": "src/alexi5.js",
+  "main": "alexi5.js",
   "engines": {
     "node": "8.x",
     "npm": "*"
