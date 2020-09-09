@@ -4,7 +4,7 @@
   "description": "",
   "main": "alexi5.js",
   "engines": {
-    "node": "8.x",
+    "node": "12.x",
     "npm": "*"
   },
   "scripts": {

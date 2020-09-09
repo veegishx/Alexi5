@@ -81,7 +81,7 @@ bot.on('message', async (message) => {
             embed.setColor('#2196f3');
             embed.setFooter('Note: This bot is a WIP. Expect frequent updates!');
             embed.setAuthor('Alexi5 Commands Help');
-            msg.channel.send(embed);
+            message.channel.send(embed);
             break;
         }
         default:
