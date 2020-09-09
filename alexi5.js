@@ -84,6 +84,19 @@ bot.on('message', async (message) => {
             message.channel.send(embed);
             break;
         }
+        case "info": {
+            const embed = new Discord.MessageEmbed();
+            embed.setTitle(':information_source: Alexi5 Status');
+            embed.setDescription('Here\'s some info about me');
+            embed.addField(':white_check_mark: API Status', `ONLINE & bot latency to this server is ${Math.round(bot.ping)}ms`);
+            embed.addField(':spy:  My masters:', 'SYKC[https://github.com/SYKC] & Veegishx[https://github.com/VEEGISHx]');
+            embed.addField(':tools:  Find the code & contribute:', 'https://github.com/VEEGISHx/Alexi5');
+            embed.addField(':purple_heart:  My Life', 'I\'m currently being hosted on a Heroku free tier server');
+            embed.setColor('#00ff00');
+            embed.addField(':satellite_orbital: Server dominance', `Found ${bot.guilds.size} server instances with a population of ${bot.users.size} users`);
+            message.channel.send(embed);
+            break;
+        }
         default:
             // If command sent by user is registered with the bot then execute command
             // Else send reply to inform user that command does not exist
