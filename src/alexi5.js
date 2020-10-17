@@ -48,6 +48,10 @@ bot.on('message', async (message) => {
             command.execute(message, args, dependencies);
             break;
         }
+        case "ping": {
+            command.execute(message, bot);
+            break;
+        }
         case "music": {
             const dependencies = [ytdl];
             command.execute(message, args, dependencies);
