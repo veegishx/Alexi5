@@ -26,7 +26,7 @@ module.exports = {
                     
                     if(option == "random") {
                         embed.setDescription(`${data.text}`);
-                        embed.setTitle("Here\'s a useless fact...");
+                        embed.setTitle("Here's a useless fact...");
                         embed.setColor("RANDOM");
                         message.channel.send(embed);
                     } else {
@@ -36,7 +36,7 @@ module.exports = {
                         message.channel.send(embed);
                     }
                 } catch(err) {
-                    message.channel.send("Can\'t look up facts. Try correctly specifying whether you want a `random` or `daily` fact.");
+                    message.channel.send("Can't look up facts. Try correctly specifying whether you want a `random` or `daily` fact.");
                 }
             }).catch(console.error);
         } catch(err) {
