@@ -1,147 +1,125 @@
-const stream = require('./stream');
-const got = require('got');
-const Discord = require('discord.js');
-const embed = new Discord.RichEmbed();
-module.exports = function music(ytkey, servers, titles, msg, prefix, musicCommand, resourceUrl) {
-        // music {musicCommand} || music {musicCommand} {resourceUrl}
-        if (!musicCommand) {
-            embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
-            embed.setDescription('Stream music from YouTube using the commands below');
-            embed.addField('Play songs in playlist: ', `${prefix}music play`, true);
-            embed.addField('Add track to playlist: ', `${prefix}music add [url]`, true);
-            embed.addField('Skip current track: ', `${prefix}music skip`, true);
-            embed.addField('Stop streaming music & leave channel: ', `${prefix}leave`, true);
-            embed.setColor('#2196f3');
-            embed.setFooter('Note: Make sure that the playlist contains at least one song before playing it. You can also add songs on the go.');
-            embed.setAuthor('Alexi5 Music Streaming Help');
-            msg.channel.send(embed);
-        } else {
-            if (!msg.member.voiceChannel) {
-                msg.reply('Please join a voice channel first.');
-                return;
+let queue = new Map();
+
+module.exports = {
+    name: 'music',
+    alias: 'mu',
+    description: 'Streams music from YouTube',
+    async execute(message, args, dependencies) {
+        const [ytdl] = dependencies;
+        try {
+            const option = args[0];
+            let serverQueue = queue.get(message.guild.id);
+
+            const voiceChannel = message.member.voice.channel;
+            if (!voiceChannel)
+              return message.channel.send(
+                "You need to be in a voice channel to play music!"
+              );
+            const permissions = voiceChannel.permissionsFor(message.client.user);
+            if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+              return message.channel.send(
+                "I need the permissions to join and speak in your voice channel!"
+              );
             }
-
-            if (!servers[msg.guild.id]) {
-                servers[msg.guild.id] = {
-                    queue: []
-                }
-
-                titles[msg.guild.id] = {
-                    queue: []
-                }
-            }
-
-            let server = servers[msg.guild.id];
-            let title = titles[msg.guild.id];
-
-            console.log('========================================');
-            console.log(prefix);
-            console.log(musicCommand);
-            console.log(resourceUrl);
-            console.log('========================================');
-
-
-
-            if (musicCommand == 'add') {
-                try {
-                    // Playlist resolver
-                    var playlistResolve = 'list';
-                    if (resourceUrl.includes(playlistResolve)) {
-                        let truncatedId = resourceUrl.split('=');
-                        let playlistId = truncatedId[2];
-                        console.log('id: ' + playlistId);
-                        got(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&key=${ytkey}&maxResults=50`).then(response => {
-                            let result = JSON.parse(response.body);
-                            let count = result.pageInfo.totalResults;
-                            let flag = 'Deleted video';
-                            // The list API doesn't provide a property for videoIDs
-                            // Instead the video IDs are provided in the thumbnail URLs
-                            // Building the video URLS after extracting the IDs from the thumbnails
-                            for (var video in result.items) {
-                                if (!result.items[video].snippet.title.includes(flag)) {
-                                    var videoId = result.items[video].snippet.thumbnails.default.url.replace('https://i.ytimg.com/vi/', '').replace('/default.jpg', '');
-                                    var videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-                                    server.queue.push(videoUrl);
-                                    title.queue.push(result.items[video].snippet.title);
-                                    console.log(`Initialized queue with: ${title.queue}`);
-                                }
-                            }
-                            msg.channel.send(`Playlist successfully parsed and loaded. ${count} songs have been added to the queue.`)
-                                .then(sent => console.log(`A playlist has been loaded`));
-                            if (count > 200) {
-                                msg.channel.send(`Wait what?? HOLYSHIT ${count} songs...`)
-                            }
-
-                        })
+            
+            switch(option) {
+                case "play":
+                    if(args[1] == null || !args[1].match(/(youtube.com|youtu.be)\/(watch)?(\?v=)?(\S+)?/)) {
+                        message.channel.send("Please provide a valid url: `music play <SONG_OR_PLAYLIST_URL>`");
                     } else {
-                        let longFormat = '=';
-                        if (resourceUrl.includes(longFormat)) {
-                            var videoId = resourceUrl.split('=').pop();
+                        const songInfo = await ytdl.getInfo(args[1]);
+                        const song = {
+                            title: songInfo.videoDetails.title,
+                            url: songInfo.videoDetails.video_url
+                        };
+
+                        if(!serverQueue) {
+                            let queueConstructor = {
+                                textChannel: message.channel,
+                                voiceChannel: voiceChannel.channel,
+                                connection: null,
+                                songs: [],
+                                volume: 5,
+                                playing: true
+                            };
+                
+                            queue.set(message.guild.id, queueConstructor);
+                            queueConstructor.songs.push(song);
+
+                            try {
+                                let connection = await voiceChannel.join();
+                                queueConstructor.connection = connection;
+                                this.play(message.guild, queueConstructor.songs[0], ytdl, message);
+                            } catch (error) {
+                                console.log(error);
+                                queue.delete(message.guild.id);
+                                return message.channel.send("ASDSDASDCDSA. There\'s been an error playing this song. I wonder what my devs are up to ._.");
+                            }
                         } else {
-                            var videoId = resourceUrl.splitOnLast('/')[1].split('/').pop();
+                            serverQueue.songs.push(song);
+                            return message.channel.send(`Song "**${song.title}**" has been queued.`);
                         }
-
-                        got(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${ytkey}`).then(response => {
-                            let result = JSON.parse(response.body);
-                            let videoTitle = result.items[0].snippet.title;
-                            server.queue.push(resourceUrl);
-                            msg.channel.send(`${videoTitle} has been added to queue`);
-                            console.log('Song added:' + server.queue);
-                        })
                     }
-                } catch (e) {
-                    msg.channel.send("Invalid arguments detected. See `+!music`")
-                }
+                    break;
+                case "skip":
+                    this.skip(message, serverQueue);
+                    break;
+                case "stop":
+                    this.stop()
+                    break;
+                default:
+                    message.channel.send("Error: Only the following options are valid: `music play <url>`, `music skip`, `music stop`");
             }
-
-            if (musicCommand == 'play') {
-                if (msg.guild.voiceChannel && server.queue[0]) {
-                    msg.channel.send("Music is already being streamed")
-                } else {
-                    msg.member.voiceChannel.join().then(connection => {
-                        // Append song to queue
-                        stream(msg, servers, titles, connection);
-                        console.log('play:' + server.queue);
-                    }).catch(console.log);
-                }
-                /*
-                if (!msg.guild.voiceChannel) {
-
-                }
-                */
-            }
-
-
-            if (musicCommand == 'skip') {
-                if (server.dispatcher) {
-                    title.queue.shift();
-                    server.dispatcher.end();
-                }
-            }
-
-            if (musicCommand == 'list') {
-                let queueCount = 0;
-                if (title.queue.length > 25) {
-                    queueCount = 25;
-                } else {
-                    queueCount = title.queue.length;
-                }
-
-                if (server.queue[0]) {
-                    msg.channel.send("**There are currently " + `${queueCount}` + " tracks queued up.**");
-                    msg.channel.send("**------------------------------------------------**");
-                    console.log(title.queue.length);
-                    for (i = 0; i < queueCount; i++) {
-                        msg.channel.send("`" + `${i}` + "` " + `**${title.queue[i]}**`)
-                        console.log(title.queue[i]);
-                    }
-                }
-            }
+        } catch (err) {
+            console.log(err);
         }
+    },
+
+    async play(guild, song, ytdl, message) {
+        let serverQueue = queue.get(guild.id);
+    
+        try {
+            message.channel.send(`:loud_sound: Now Playing "**${song.title}**".`);
+        } catch (err) {
+            message.channel.send("No more songs left in queue. Bye!");
+        }
+
+        if(!song){
+            serverQueue.voiceChannel.leave();
+            queue.delete(guild.id);
+            return;
+        }
+
+        // https://github.com/fent/node-ytdl-core/issues/402
+        // Some streams end around 10 seconds earlier. This is a temporary hack: highWaterMark: 1<<25
+        const dispatcher = serverQueue.connection
+        .play(ytdl(song.url,{fliter:"audioonly", highWaterMark: 1<<25}))
+        .on("finish", () => {
+            serverQueue.songs.shift();
+            this.play(guild, serverQueue.songs[0], ytdl, message);
+        })
+        .on('error', () => {
+            console.log(error)
+        })
+    
+        dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    },
+
+    skip(message, serverQueue) {
+		try {
+            if (!message.member.voice.channel) return message.channel.send('You have to be in a voice channel to skip a song!');
+            if (!queue) return message.channel.send('*Can\'t skip as there are no songs queued. Try `music stop` if you want me to stop streaming music.');
+            serverQueue.connection.dispatcher.end();
+        } catch (err) {
+            serverQueue.voiceChannel.leave();
+        }
+    },
+
+    stop() {
+        console.log("Bye!");
+    },
+
+    updateQueue() {
+
     }
-    /*
-    embed.addField(`${memeTitle}`, `[View thread](${memeUrl})`);
-            embed.setImage(memeImage);
-            embed.setFooter(`👍 ${memeUpvotes} 👎 ${memeDownvotes} 💬 ${memeNumComments}`);
-            msg.channel.send(embed)
-            */
+}

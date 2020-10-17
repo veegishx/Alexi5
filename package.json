@@ -2,14 +2,14 @@
   "name": "alexi5",
   "version": "1.0.0",
   "description": "",
-  "main": "src/alexi5.js",
+  "main": "alexi5.js",
   "engines": {
-    "node": "8.x",
+    "node": "12.x",
     "npm": "*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node alexi5.js"
   },
   "keywords": [
     "discordjs",
@@ -19,14 +19,18 @@
   "author": "veegishx",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.3.2",
+    "@discordjs/opus": "^0.3.2",
+    "discord.js": "^12.0.2",
+    "dotenv": "^8.2.0",
+    "ffmpeg": "0.0.4",
     "ffmpeg-binaries": "^3.2.2",
-    "got": "^8.3.1",
-    "moment": "^2.24.0",
-    "moment-timezone": "^0.5.23",
+    "fluent-ffmpeg": "^2.1.2",
+    "got": "^8.3.2",
+    "moment": "^2.27.0",
+    "moment-timezone": "^0.5.31",
     "opusscript": "0.0.6",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.3.0",
     "xmlhttprequest": "^1.8.0",
-    "ytdl-core": "^0.20.4"
+    "ytdl-core": "^3.2.0"
   }
 }
