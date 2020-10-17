@@ -26,5 +26,5 @@ jspm_packages/
 
 # Private Configs
 .env
-
+config.json
 package-lock.json

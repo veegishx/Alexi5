@@ -6,7 +6,6 @@ const ytdl = require('ytdl-core');
 
 const prefix = process.env.BOT_PREFIX;
 const token = process.env.BOT_TOKEN;
-const ytkey = process.env.YOUTUBE_KEY;
 
 const bot = new Discord.Client();
 
