@@ -44,14 +44,10 @@ module.exports = {
                             message.channel.send(embed);
                         }
                     } catch (err) {
-                        console.log(`URL: ${url}:`);
-                        console.log(`${err.name}: ${err.message}`);
                         message.channel.send("Reddit machine goes brrr. Sorry, could not fetch posts from this subreddit :(");
                     }
             });
         } catch(err) {
-            console.log(`URL: ${url}:`);
-            console.log(`${err.name}: ${err.message}`);
             message.channel.send("I'm currently having trouble working with reddit. Please try again later.");
         }
     }
