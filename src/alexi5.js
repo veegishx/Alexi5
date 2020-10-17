@@ -1,146 +1,115 @@
+require("dotenv").config();
 const Discord = require('discord.js');
-const bot = new Discord.Client();
-
-let servers = {};
-let titles = {};
-
+const fs = require('fs');
 const got = require('got');
 const ytdl = require('ytdl-core');
-const config = require('./config.json');
-const meme = require('./commands/fun/meme.js');
-const joke = require('./commands/fun/joke.js');
-const amazeme = require('./commands/fun/amazeme.js');
-const music = require('./commands/music/music.js');
-const listCommands = require('./commands/default.js');
-const info = require('./commands/utility/info.js');
 
-const prefix = config.prefix;
-const token = process.env.BOT_TOKEN
-const ytkey = config.youtube;
+const prefix = process.env.BOT_PREFIX;
+const token = process.env.BOT_TOKEN;
+
+const bot = new Discord.Client();
+
+bot.commands = new Discord.Collection();
+bot.aliases = new Discord.Collection();
+
+const CommandManager = fs.readdirSync('./src/commands/');
+
+CommandManager.forEach(c => {
+    fs.readdir(`./src/commands/${c}/`, (err, files) => {
+        if (err) throw err;
+        console.log(`[CommandManager] Loaded ${files.length} commands of module ${c}`);
+
+        files.forEach(f => {
+            const commands = require(`./src/commands/${c}/${f}`);
+
+            bot.commands.set(commands.name, commands);
+            bot.aliases.set(commands.alias, commands);
+
+            console.log(`[CommandManager] Name: ${commands.name} ( ${commands.alias} )`);
+        });
+        console.log("-----------------------------------------------");
+    });
+});
 
 var time = new Date();
 var timestamp = '[' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds() + ']';
 
 bot.on('ready', () => {
-    console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
-    console.log(`--------------------------------------------`);
-    console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
-    console.log(`Bot is up and running`);
-    //console.log(bot.guilds);
-    //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
-    console.log(`--------------------------------------------`);
-    bot.user.setActivity(`Playing +!help`);
+    // console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
+    // console.log(`--------------------------------------------`);
+    // console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
+    // console.log(`Bot is up and running`);
+    // //console.log(bot.guilds);
+    // //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
+    // console.log(`--------------------------------------------`);
+    bot.user.setActivity(`Aye +!help`);
 });
 
-//Credits for these helpful stats: https://gist.github.com/eslachance/3349734a98d30011bb202f47342601d3
-bot.on("guildCreate", guild => {
-    // This event triggers when the bot joins a guild.
-    console.log(`New guild joined: ${guild.name} (id: ${guild.id}). This guild has ${guild.memberCount} members!`);
-});
 
-bot.on("guildDelete", guild => {
-    // this event triggers when the bot is removed from a guild.
-    console.log(`I have been removed from: ${guild.name} (id: ${guild.id})`);
-});
+bot.on('message', async (message) => {
+    // Ignore any bot messages or messages that do not start with the prefix set
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
 
-bot.on('message', async msg => {
-    if (msg.content.substring(0, 2) == prefix) {
-        var sentence = msg.content.slice(2);
-        var args = sentence.split(" ");
+    const args = message.content.slice(prefix.length).split(/ +/);
+    const userCommand = args.shift().toLowerCase();
+    const command = bot.commands.get(userCommand) || bot.aliases.get(userCommand);
 
-        // It's good practice to ignore other bots. This also makes your bot ignore itself
-        // and not get into a spam loop (we call that "botception").
-        if (msg.author.bot) return;
-
-        // Also good practice to ignore any message that does not start with our prefix, 
-        // which is set in the configuration file.
-        if (msg.content.indexOf(config.prefix) !== 0) return;
-
-        if (args[0] == undefined || !args[0].trim().length) {
-            msg.channel.send('Error: You need to specify at least 1 argument');
-            msg.channel.send(`Try **${prefix}help** for a list of options`);
+    switch(userCommand) {
+        case "reddit":
+        case "fact": {
+            const dependencies = [Discord, got];
+            command.execute(message, args, dependencies);
+            break;
         }
-
-        switch (args[0].toLowerCase()) {
-            case 'help':
-                listCommands(prefix, msg);
-                break;
-            case 'info':
-                info(bot, msg);
-                break;
-            case 'meme':
-                meme(msg);
-                break;
-            case 'nsfw':
-                msg.reply("This feature has been removed for now...")
-                break;
-            case 'joke':
-                joke(msg);
-                break;
-            case 'amazeme':
-                amazeme(msg);
-                break;
-            case 'ask':
-                if (!args[1]) {
-                    msg.reply("Please ask a question `+!ask your_question`");
-                } else {
-                    let replies = [
-                        'Yes.',
-                        'Yes.',
-                        'No.',
-                        'Perhaps you should consider it.',
-                        'Probably.',
-                        'Indeed',
-                        'Just get over with it.',
-                        'Maybe, maybe not. Maybe go fuck yourself.',
-                        'When the sun rises north, and when the pigs fly, then thou shalt find what you seek.'
-                    ];
-
-                    let botreply = replies[Math.floor(Math.random() * replies.length)];
-                    msg.reply(botreply);
-                }
-                break;
-            case 'ping':
-                const m = await msg.channel.send("Ping?");
-                m.edit(`Pong! Latency is ${m.createdTimestamp - msg.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
-                break;
-            case 'music':
-                if (!args[1]) {
-                    const embed = new Discord.RichEmbed();
-                    embed.setTitle(':musical_note:  Music Streaming  :musical_note: ')
-                    embed.setDescription('Stream music from YouTube using the commands below');
-                    embed.addField('Play songs in playlist: ', `${prefix}music play`, true);
-                    embed.addField('Add track to playlist: ', `${prefix}music add [url]`, true);
-                    embed.addField('Skip current track: ', `${prefix}music skip`, true);
-                    embed.addField('Stop streaming music & leave channel: ', `${prefix}leave`, true);
-                    embed.setColor('#2196f3');
-                    embed.setFooter('Note: Make sure that the playlist contains at least one song before playing it. You can also add songs on the go.');
-                    embed.setAuthor('Alexi5 Music Streaming Help');
-                    msg.channel.send(embed);
-                } else {
-                    music(ytkey, servers, titles, msg, args[0], args[1], args[2]);
-                }
-                break;
-            case 'leave':
-                if (msg.guild.voiceConnection) {
-                    msg.guild.voiceConnection.disconnect();
-                    msg.channel.send("Stream has ended ʕ•ᴥ•ʔ");
-                }
-                break;
-            case 'purge':
-                const deleteCount = parseInt(args[1], 10);
-
-                if (!deleteCount || deleteCount < 1 || deleteCount > 100)
-                    return msg.reply("Please provide a number between 1 and 100 for the number of messages to delete");
-
-                const fetched = await msg.channel.fetchMessages({ limit: deleteCount });
-                msg.channel.bulkDelete(fetched).catch(error => msg.reply(`Couldn't delete messages because of: ${error}`));
-                msg.channel.send(`PURGE! PURGE! PURGE! ${deleteCount} messages have been slaughtered :)`)
-                break;
-            default:
-                msg.channel.send('This feature hasn\'t been implemented yet :slight_frown:');
+        case "music": {
+            const dependencies = [ytdl];
+            command.execute(message, args, dependencies);
+            break;
         }
+        case "help": {
+            const embed = new Discord.MessageEmbed();
+            embed.setTitle(':robot: Things I can do :robot: ')
+            embed.addField(':dart:  FUN STUFF', '--------------');
+            embed.addField('Music', `Stream music from YouTube: ${prefix}music`, true);
+            embed.addField('Fact', `Get useless facts: ${prefix}fact | ${prefix}fact today`, true);
+            embed.addField('Reddit', `Get random content from a subreddit: ${prefix}reddit [subreddit]`, true);
+            embed.addField(':tools: USEFUL STUFF', '--------------');
+            embed.addField('Ping', `View latency to server: ${prefix}ping`, true);
+            embed.addField('Bot Status', `View bot info: ${prefix}info`, true);
+            embed.setColor('#2196f3');
+            embed.setFooter('Note: This bot is a WIP. Expect frequent updates!');
+            embed.setAuthor('Alexi5 Commands Help');
+            message.channel.send(embed);
+            break;
+        }
+        case "info": {
+            const embed = new Discord.MessageEmbed();
+            embed.setTitle(':information_source: Alexi5 Status');
+            embed.setDescription('Here\'s some info about me');
+            embed.addField(':white_check_mark: API Status', `ONLINE & bot latency to this server is ${Math.round(bot.ping)}ms`);
+            embed.addField(':spy:  My masters:', 'SYKC[https://github.com/SYKC] & Veegishx[https://github.com/VEEGISHx]');
+            embed.addField(':tools:  Find the code & contribute:', 'https://github.com/VEEGISHx/Alexi5');
+            embed.addField(':purple_heart:  My Life', 'I\'m currently being hosted on a Heroku free tier server');
+            embed.setColor('#00ff00');
+            embed.addField(':satellite_orbital: Server dominance', `Found ${bot.guilds.size} server instances with a population of ${bot.users.size} users`);
+            message.channel.send(embed);
+            break;
+        }
+        default:
+            // If command sent by user is registered with the bot then execute command
+            // Else send reply to inform user that command does not exist
+            try {
+                command.execute(message, args);
+            } catch(err) {
+                message.channel.send("Zoinks, I cannot understand this command!")
+                console.log(`${err.name}: ${err.message}`);
+            }
     }
+
+
+
+    console.log(`userCommands: ${userCommand}`);
+    console.log(`args: ${args}`);
 });
 
 bot.login(token);
