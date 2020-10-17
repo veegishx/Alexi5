@@ -14,6 +14,8 @@ bot.aliases = new Discord.Collection();
 
 const CommandManager = fs.readdirSync('./src/commands/');
 
+
+
 CommandManager.forEach(c => {
     fs.readdir(`./src/commands/${c}/`, (err, files) => {
         if (err) throw err;
@@ -30,21 +32,6 @@ CommandManager.forEach(c => {
         console.log("-----------------------------------------------");
     });
 });
-
-var time = new Date();
-var timestamp = '[' + time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds() + ']';
-
-bot.on('ready', () => {
-    // console.log(`${timestamp} Logged in as ${bot.user.tag}!`);
-    // console.log(`--------------------------------------------`);
-    // console.log(`Bot has started, with ${bot.users.size} users, in ${bot.channels.size} channels of ${bot.guilds.size} guilds.`);
-    // console.log(`Bot is up and running`);
-    // //console.log(bot.guilds);
-    // //bot.user.setActivity(`Serving ${bot.guilds.size} servers`);
-    // console.log(`--------------------------------------------`);
-    bot.user.setActivity(`Aye +!help`);
-});
-
 
 bot.on('message', async (message) => {
     // Ignore any bot messages or messages that do not start with the prefix set
@@ -102,14 +89,8 @@ bot.on('message', async (message) => {
                 command.execute(message, args);
             } catch(err) {
                 message.channel.send("Zoinks, I cannot understand this command!")
-                console.log(`${err.name}: ${err.message}`);
             }
     }
-
-
-
-    console.log(`userCommands: ${userCommand}`);
-    console.log(`args: ${args}`);
 });
 
 bot.login(token);

@@ -17,7 +17,6 @@ module.exports = {
 
         const url = `https://uselessfacts.jsph.pl/${option}.json?language=en`;
 
-        console.log("URL: " +url);
         try {
             got(url).then(response => {
                 try {
@@ -40,8 +39,6 @@ module.exports = {
                 }
             }).catch(console.error);
         } catch(err) {
-            console.log(`URL: ${url}:`);
-            console.log(`${err.name}: ${err.message}`);
             message.channel.send("I'm currently having trouble looking up facts. Please try again later.");
         }
     }
