@@ -17,8 +17,8 @@ Alexi5 is a basic Discord bot built using discord.js
 This will generate a random bot token for you. You will need this for the bot to work
 *  Create a .env file in the root directory with the following environment variables:
 ```
-BOT_TOKEN: bot_token_here 
-BOT_PREFIX: bot_prefix_here
+BOT_TOKEN=bot_token_here 
+BOT_PREFIX=bot_prefix_here
 ```
 * Replace `bot_token_here` with the generated token and `bot_prefix_here` with a prefix of your liking, 
 eg `+!`
