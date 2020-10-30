@@ -12,11 +12,14 @@ Alexi5 is a basic Discord bot built using discord.js
 
 ### Installation
 * Clone this repo
-* Rename config-example.json to config.json
-* Create a new app here: https://discordapp.com/developers/applications/me
-* Paste the bot token in your config.json
-* Get a YouTube Api key from [here](https://console.developers.google.com/apis/credentials?project=_) and paste it in your config.json
 * Run `npm install` to install the bot dependencies
+*  Create a .env file in the root directory with the following environment variables:
+```
+BOT_TOKEN: bot_token_here 
+BOT_PREFIX: bot_prefix_here
+```
+* Create a new app here: https://discordapp.com/developers/applications/me
+* Paste the bot token in your .env file
 * `cd` into working directory
 * Start the bot locally using `node alexi5`
 
