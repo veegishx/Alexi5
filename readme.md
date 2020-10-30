@@ -13,7 +13,8 @@ Alexi5 is a basic Discord bot built using discord.js
 ### Installation
 * Clone this repo
 * Run `npm install` to install the bot dependencies
-* Create a new app here: https://discordapp.com/developers/applications/me
+* Create a new app here: https://discordapp.com/developers/applications/me. 
+This will generate a random bot token for you. You will need this for the bot to work
 *  Create a .env file in the root directory with the following environment variables:
 ```
 BOT_TOKEN: bot_token_here 
