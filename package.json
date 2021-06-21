@@ -26,7 +26,7 @@
     "ffmpeg-binaries": "^3.2.2",
     "ffmpeg-static": "^4.2.7",
     "fluent-ffmpeg": "^2.1.2",
-    "got": "^8.3.2",
+    "got": "^9.5.1",
     "moment": "^2.27.0",
     "moment-timezone": "^0.5.31",
     "opusscript": "0.0.6",
