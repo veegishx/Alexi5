@@ -19,7 +19,7 @@
   "author": "veegishx",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
+    "@discordjs/opus": "^0.5.2",
     "discord.js": "^12.0.2",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
