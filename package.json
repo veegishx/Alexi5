@@ -19,8 +19,8 @@
   "author": "veegishx",
   "license": "MIT",
   "dependencies": {
-    "@discordjs/opus": "^0.3.2",
-    "discord.js": "^12.0.2",
+    "@discordjs/opus": "^0.8.0",
+    "discord.js": "^13.14.0",
     "dotenv": "^8.2.0",
     "ffmpeg": "0.0.4",
     "ffmpeg-binaries": "^3.2.2",
